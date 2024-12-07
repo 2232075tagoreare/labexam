@@ -1,0 +1,114 @@
+package com.klef.jfsd.exam;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class RestTemplateExampleApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(RestTemplateExampleApplication.class, args);
+    }
+}
+
+
+
+
+
+package com.klef.jfsd.exam;
+
+public class Comment {
+    private int postId;
+    private int id;
+    private String name;
+    private String email;
+    private String body;
+
+    // Getters and Setters
+    public int getPostId() {
+        return postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+}
+
+
+
+
+
+package com.klef.jfsd.exam;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+@Service
+public class CommentService {
+    private final String apiUrl = "https://jsonplaceholder.typicode.com/comments";
+
+    public Comment[] fetchAllComments() {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(apiUrl, Comment[].class);
+    }
+}
+
+
+
+
+
+package com.klef.jfsd.exam;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/comments")
+public class CommentController {
+    @Autowired
+    private CommentService commentService;
+
+    @GetMapping
+    public Comment[] getAllComments() {
+        return commentService.fetchAllComments();
+    }
+}
+
+
+
+
+
+http://localhost:8080/api/comments
